@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BAIGE English Race</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:17px system-ui,sans-serif;background:#f7f0df;color:#253d33}main{max-width:950px;margin:auto;padding:28px 18px}h1{font-size:clamp(30px,6vw,52px);margin:0}p{line-height:1.5}.tag{color:#776140;letter-spacing:3px;font-size:12px;font-weight:700}.panel{background:#fffdf6;border:1px solid #d9d0ba;border-radius:18px;padding:22px;margin:20px 0;box-shadow:0 5px 20px #493c1810}.setup{display:flex;gap:14px;flex-wrap:wrap;align-items:end}label{display:grid;gap:7px;flex:1;min-width:160px}input,select,button{font:inherit;border-radius:10px;padding:12px;border:1px solid #c8c4b4}button{background:#25644c;color:white;cursor:pointer;font-weight:650}button:hover{filter:brightness(1.1)}button:disabled{opacity:.55;cursor:default}.secondary{background:#e8e0cd;color:#253d33}.lane{margin:15px 0}.track{position:relative;height:62px;border-bottom:3px dashed #b89860;background:linear-gradient(#e7edcc,#e7edcc);border-radius:10px;margin-top:8px}.track:after{content:'🏁';position:absolute;right:0;top:12px;font-size:30px}.horse{position:absolute;left:0;top:8px;font-size:36px;transition:left .5s;z-index:1;transform:scaleX(-1)}.lane-head{display:flex;justify-content:space-between;font-weight:650}.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}.choices button{background:#edf1e4;color:#253d33;text-align:left;border:1px solid #cbd5bd}.choices button.correct{background:#bfe6c9}.choices button.wrong{background:#f4c4bb}#question{font-size:25px;margin:12px 0 20px}#feedback{min-height:28px;font-weight:650}#next{margin-top:8px}[hidden]{display:none!important}.small{font-size:14px;color:#6c725f}footer{text-align:center;font-size:13px;color:#6c725f}@media(max-width:500px){.choices{grid-template-columns:1fr}.panel{padding:16px}}
+</style>
+</head>
+<body><main>
+<div class="tag">БӘЙГЕ · LEARN & RACE</div><h1>BAIGE English Race</h1>
+<p>Answer English questions to move your horse. Take turns — the first team to finish wins!</p>
+<section class="panel setup" aria-label="Race setup">
+<label>Team 1<input id="name1" value="Tulpar" maxlength="30"></label>
+<label>Team 2<input id="name2" value="Zheyrik" maxlength="30"></label>
+<label>Correct answers to win<select id="goal"><option value="5">5 — Quick race</option><option value="10">10 — Long race</option></select></label>
+<button id="start">Start race</button><button id="reset" class="secondary">Reset</button>
+</section>
+<section class="panel" aria-label="Race track">
+<div class="lane"><div class="lane-head"><span id="team1">Tulpar</span><span id="score1">0 / 5</span></div><div class="track"><span class="horse" id="horse1" role="img" aria-label="Team 1 horse">🐎</span></div></div>
+<div class="lane"><div class="lane-head"><span id="team2">Zheyrik</span><span id="score2">0 / 5</span></div><div class="track"><span class="horse" id="horse2" role="img" aria-label="Team 2 horse">🐎</span></div></div>
+</section>
+<section class="panel" aria-label="English quiz"><div id="turn" class="tag">READY TO RACE?</div><h2 id="question">Press Start race to begin.</h2><div id="choices" class="choices"></div><p id="feedback" role="status" aria-live="polite"></p><button id="next" hidden>Next turn →</button><p class="small">Correct answer: one step forward. Incorrect answer: your horse stays in place. Each team gets a turn.</p></section>
+<footer>Standalone offline edition · No internet or installation needed</footer>
+</main>
+<script>
+'use strict';
+const questions = [
+['She ___ to school every day.',['go','goes','going','gone'],1],
+['What is the plural of “child”?',['childs','childes','children','child'],2],
+['Choose the opposite of “fast”.',['slow','tall','early','strong'],0],
+['I ___ a book yesterday.',['read','reads','reading','am read'],0],
+['There ___ two horses in the field.',['is','am','are','be'],2],
+['Choose the correct sentence.',['He have a horse.','He has a horse.','He having a horse.','He haves a horse.'],1],
+['We have English ___ Monday.',['in','at','on','by'],2],
+['A person who teaches is a ___.',['farmer','driver','teacher','doctor'],2],
+['This is ___ apple.',['a','an','the a','many'],1],
+['They ___ football now.',['play','plays','played','are playing'],3],
+['What is the past tense of “go”?',['goed','went','goes','going'],1],
+['Choose the comparative of “big”.',['bigger','biggest','more big','biger'],0],
+['My sister is ___ than me.',['young','youngest','younger','most young'],2],
+['How ___ water do you need?',['many','much','few','a'],1],
+['The sun rises in the ___.',['west','north','south','east'],3],
+['I can ___ English.',['speaks','speaking','speak','spoke'],2],
+['Choose the opposite of “hot”.',['warm','cold','dry','bright'],1],
+['___ is your name?',['What','Where','When','Why'],0],
+['We ___ at home last night.',['was','are','were','is'],2],
+['Choose the correct spelling.',['beautifull','beautiful','beutiful','beautifal'],1],
+['A horse has four ___.',['wings','hands','legs','arms'],2],
+['She has lived here ___ 2020.',['for','since','at','on'],1],
+['If it rains, we ___ stay inside.',['will','would yesterday','are','did'],0],
+['Choose the superlative of “good”.',['goodest','better','best','more good'],2],
+['This book belongs to me. It is ___.',['my','mine','me','I'],1],
+['You ___ wear a seat belt in a car.',['must','can to','must to','are must'],0],
+['I enjoy ___ music.',['listen','listens','listened','listening to'],3],
+['We ___ dinner when the phone rang.',['were having','has','are have','having'],0],
+['Which word is a colour?',['yellow','table','run','happy'],0],
+['Please put the book ___ the table.',['on','of','to','with'],0]
+];
+const el = id => document.getElementById(id);
+let names=['Tulpar','Zheyrik'], scores=[0,0], goal=5, player=0, deck=[], index=0, active=false, answered=false;
+function shuffle(list){return list.map(x=>({x,r:Math.random()})).sort((a,b)=>a.r-b.r).map(o=>o.x);}
+function render(){for(let i=0;i<2;i++){el('team'+(i+1)).textContent=names[i];el('score'+(i+1)).textContent=scores[i]+' / '+goal;el('horse'+(i+1)).style.left='calc('+scores[i]/goal*100+'% - '+scores[i]/goal*48+'px)';}}
+function showQuestion(){answered=false;el('next').hidden=true;el('feedback').textContent='';el('turn').textContent=names[player]+' — YOUR TURN';const q=deck[index];el('question').textContent=q[0];el('choices').replaceChildren();q[1].forEach((text,i)=>{const b=document.createElement('button');b.textContent=text;b.onclick=()=>answer(i);el('choices').append(b);});}
+function answer(choice){if(!active||answered)return;answered=true;const q=deck[index],correct=choice===q[2];if(correct)scores[player]++;Array.from(el('choices').children).forEach((b,i)=>{b.disabled=true;if(i===q[2])b.classList.add('correct');else if(i===choice)b.classList.add('wrong');});render();el('feedback').textContent=correct?'Correct! Your horse moves forward.':'Good try! Correct answer: '+q[1][q[2]]+'.';if(scores[player]>=goal){active=false;el('turn').textContent='RACE COMPLETE';el('feedback').textContent='🏆 '+names[player]+' wins! Press Start race to play again.';}else el('next').hidden=false;}
+function start(){names=[el('name1').value.trim()||'Tulpar',el('name2').value.trim()||'Zheyrik'];goal=Number(el('goal').value);scores=[0,0];player=0;index=0;deck=shuffle(questions);active=true;render();showQuestion();}
+function reset(){active=false;answered=false;scores=[0,0];render();el('choices').replaceChildren();el('turn').textContent='READY TO RACE?';el('question').textContent='Press Start race to begin.';el('feedback').textContent='';el('next').hidden=true;}
+el('start').onclick=start;el('reset').onclick=reset;el('next').onclick=()=>{if(!active||!answered)return;player=1-player;index++;if(index>=deck.length){deck=shuffle(questions);index=0;}showQuestion();};render();
+</script></body></html>
